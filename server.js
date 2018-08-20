@@ -1,19 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ApolloServer } = require('apollo-server-express');
-const { makeExecutableSchema } = require('graphql-tools');
+//const { makeExecutableSchema } = require('graphql-tools');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
 const db = require('./config/keys').MONGO_URI;
 const typeDefs = require('./typeDefs/todo');
 const resolvers = require('./resolvers/todo');
-//  const schema = makeExecutableSchema({ typeDefs, resolvers });
-//  const Todo = require('./models/Todo');
-//  const models = { Todo };
+const Todo = require('./models/Todo');
+const models = { Todo };
 
 const app = express();
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers, context: req => ({ req, models }) });
 const PORT = process.env.PORT || 4000;
 
 mongoose

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-//import { ListItem, ListItemSecondaryAction, Checkbox } from 'material-ui';
+import gql from 'graphql-tools';
+import { Mutation } from 'react-apollo';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,7 +18,6 @@ class TodoItem extends Component {
 
   render() {
     const { todo } = this.props;
-    console.log(this.props);
     return (
       <ListItem
         key={todo.id}
@@ -31,6 +31,7 @@ class TodoItem extends Component {
         />
         <ListItemText primary={`${todo.text}`} />
         <ListItemSecondaryAction>
+          { this.state.check ? 'Completed' : 'Running...' }
         </ListItemSecondaryAction>
       </ListItem>
     );

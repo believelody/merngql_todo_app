@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import TodoItem from './TodoItem';
-//import { List, Button, AddIcon } from 'material-ui';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/AddIcon';
+//import { AddIcon } from '@material-ui/icons';
 
 const Todos = ({todos}) => {
-  console.log(todos);
   return (
     <List>
     {

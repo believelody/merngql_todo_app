@@ -5,6 +5,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class TodoItem extends Component {
   constructor(props) {
@@ -29,9 +31,11 @@ class TodoItem extends Component {
           checked={this.state.check}
           disableRipple
         />
-        <ListItemText primary={`${todo.text}`} />
+        <ListItemText primary={`${todo.text}`} secondary={this.state.check ? 'Completed' : 'Running...'} />
         <ListItemSecondaryAction>
-          { this.state.check ? 'Completed' : 'Running...' }
+          <IconButton aria-label="Delete">
+            <DeleteIcon />
+          </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
     );

@@ -1,46 +1,77 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tools';
+import React, { Component, Fragment } from 'react';
+import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import Checkbox from '@material-ui/core/Checkbox';
+
+import TodoCheckbox from './TodoCheckbox';
+import { completeTodo, removeTodo, getAllTodos } from '../queries/queries';
+
+import { withStyles } from '@material-ui/core/styles';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-class TodoItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      check: props.complete
-    }
+const styles = theme => ({
+  item: {
+    background: "#4CAF50",
+    color: "white"
   }
+});
 
-  handleToggle = () => this.setState({ check: !this.state.check });
+class TodoItem extends Component {
 
   render() {
-    const { todo } = this.props;
+    const { todo, classes } = this.props;
     return (
-      <ListItem
-        key={todo.id}
-        dense
-        button
-        onClick={this.handleToggle}
+      <Mutation
+        mutation={completeTodo}
       >
-        <Checkbox
-          checked={this.state.check}
-          disableRipple
-        />
-        <ListItemText primary={`${todo.text}`} secondary={this.state.check ? 'Completed' : 'Running...'} />
-        <ListItemSecondaryAction>
-          <IconButton aria-label="Delete">
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
+      {
+        (completeTodo) =>
+        {
+          return(
+            <ListItem
+              className={ todo.complete ? classes.item : null }
+              key={todo.id}
+              dense
+              button
+              onClick={
+                () => completeTodo({
+                  variables: {
+                    id: todo.id,
+                    complete: !todo.complete
+                  }
+                })
+              }
+            >
+              <TodoCheckbox checked={todo.complete} />
+              <ListItemText primary={`${todo.text}`} secondary={todo.complete ? 'Completed' : 'Running...'} />
+              <ListItemSecondaryAction>
+                <Mutation
+                  mutation={removeTodo}
+                  refetchQueries={
+                    () => [
+                      { query: gql`${getAllTodos}` }
+                    ]
+                  }
+                >
+                {
+                  removeTodo => (
+                    <IconButton onClick={ () => removeTodo({ variables: {id: todo.id} }) } aria-label="Delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  )
+                }
+                </Mutation>
+              </ListItemSecondaryAction>
+            </ListItem>
+          )
+        }
+      }
+      </Mutation>
     );
   }
-
 }
 
-export default TodoItem;
+export default withStyles(styles)(TodoItem);

@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import { Query } from 'react-apollo';
+
+import { getTodo } from '../queries/queries';
+
 import TodoItem from './TodoItem';
+
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
 //import { AddIcon } from '@material-ui/icons';

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { getAllTodos } from './queries/queries';
@@ -20,11 +21,6 @@ import './App.css';
   So I don't care about query. I make a single query but it can contain multiple sub-queries.
   Awesome I know
 */
-const rootQuery = gql`
-  {
-    ${getAllTodos}
-  }
-`;
 
 const styles = {
   card: {
@@ -62,12 +58,12 @@ class App extends Component {
   render() {
     let { open } = this.state;
     let { classes } = this.props;
-    
+
     return (
       <Card className={classes.card}>
         <CardHeader title="Todo App" />
         <CardContent className={classes.cardContent}>
-          <Query query={rootQuery}>
+          <Query query={gql`${getAllTodos}`}>
           {
             ({ loading, data: {getAllTodos} }) =>
               loading
@@ -97,5 +93,10 @@ class App extends Component {
     )
   }
 }
+
+App.propTypes = {
+  classes: PropTypes.object.isRequired
+}
+
 
 export default withStyles(styles)(App);

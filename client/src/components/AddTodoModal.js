@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import AddTodoForm from './AddTodoForm';
 
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
   modal: {
@@ -16,13 +17,6 @@ const styles = theme => ({
     padding: theme.spacing.unit * 4,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-  },
-  textField: {
-    margin: `0 ${theme.spacing.unit}`,
-    width: 300
-  },
-  button: {
-    marginTop: 20
   }
 });
 
@@ -30,8 +24,7 @@ class AddTodoModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
-      text: ''
+      open: false
     }
   }
 
@@ -41,14 +34,7 @@ class AddTodoModal extends Component {
     }
   }
 
-  handleChange = (e) => this.setState({ [e.target.name]: e.target.value });
-
-  closeModal = () => this.setState({ open: false });
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state.text);
-  }
+  closeModal = value => this.setState({ open: value });
 
   render() {
     let { open, text } = this.state;
@@ -59,33 +45,23 @@ class AddTodoModal extends Component {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
         open={open}
-        onClose={this.closeModal}
+        onClose={() => this.closeModal(false)}
       >
         <div className={classes.modal}>
           <Typography variant="title" id="modal-title">
             Add a todo
           </Typography>
           <Typography variant="subheading" id="modal-description">
-            <form onSubmit={this.handleSubmit} noValidate>
-              <TextField
-              className={ classes.textField }
-                value={text}
-                label="Text"
-                onChange={this.handleChange}
-                margin="normal"
-                name="text"
-                margin="normal"
-              />
-              <br />
-              <Button type="submit" className={ classes.button } variant="outlined">
-                Validate
-              </Button>
-            </form>
+            <AddTodoForm closeModal={this.closeModal} />
           </Typography>
         </div>
       </Modal>
     );
   }
+}
+
+AddTodoModal.propTypes = {
+  classes: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(AddTodoModal);

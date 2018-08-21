@@ -5,15 +5,17 @@ module.exports = gql`
     id: ID!
     text: String!
     complete: Boolean!
-    createdAt: String!
   }
 
   type Query {
     todos: String
-    getAllTodos: [Todo!]!    
+    getAllTodos: [Todo!]!
+    getTodo(id: ID!): Todo!
   }
 
   type Mutation {
     addTodo(text: String!): Todo!
+    removeTodo(id: ID!): Todo
+    completeTodo(id: ID!, complete: Boolean!): Todo!
   }
 `;
